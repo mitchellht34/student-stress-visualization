@@ -1363,6 +1363,11 @@ function drawComparisonPanel(
   const chartTop = 180;
   const chartHeight = 180;
 
+  const panelKey =
+    startX === 0
+      ? "left"
+      : "right";
+
   const averageGPA =
     d3.mean(
       group.students,
@@ -1472,21 +1477,25 @@ function drawComparisonPanel(
     )
     .call(
       d3.axisLeft(y)
-      .ticks(5)
-      .tickFormat(
-        (value) =>
-          `${value}%`
-      )
+        .ticks(5)
+        .tickFormat(
+          (value) =>
+            `${value}%`
+        )
     );
 
   svg
     .selectAll(
-      `.comparison-${startX}`
+      `.comparison-${panelKey}`
     )
     .data(
       distribution
     )
     .join("rect")
+    .attr(
+      "class",
+      `comparison-${panelKey}`
+    )
     .attr(
       "x",
       (item) =>
@@ -1514,16 +1523,23 @@ function drawComparisonPanel(
           item.level
         ]
     )
-    .attr("rx", 5);
+    .attr(
+      "rx",
+      5
+    );
 
   svg
     .selectAll(
-      `.comparison-label-${startX}`
+      `.comparison-label-${panelKey}`
     )
     .data(
       distribution
     )
     .join("text")
+    .attr(
+      "class",
+      `comparison-label-${panelKey}`
+    )
     .attr(
       "x",
       (item) =>
