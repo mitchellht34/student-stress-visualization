@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Student Lifestyle and Stress</title>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <header class="site-header">
+    <div>
+      <p class="eyebrow">Dynamic Scientific Storytelling</p>
+
+      <h1>Student Lifestyle and Stress</h1>
+
+      <p class="subtitle">
+        How daily habits relate to academic performance and stress
+      </p>
+    </div>
+
+    <div class="header-actions">
+      <span id="data-status" class="status-pill">
+        Loading data...
+      </span>
+
+      <button
+        id="global-reset"
+        class="secondary-button"
+        type="button"
+      >
+        Reset
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="story-intro">
+      <div>
+        <p class="section-kicker">
+          Question
+        </p>
+
+        <h2>
+          How do students' daily lifestyle patterns relate to
+          academic performance and stress?
+        </h2>
+
+        <p>
+          This interactive story uses a student lifestyle dataset
+          from Kaggle. It explores patterns between daily habits,
+          academic performance, and stress levels without treating
+          those relationships as proof of causation.
+        </p>
+      </div>
+
+      <aside class="source-card">
+        <strong>
+          Primary data source
+        </strong>
+
+        <span>
+          Student Lifestyle Dataset — Kaggle
+        </span>
+      </aside>
+    </section>
+
+    <nav class="view-nav">
+      <button
+        class="view-tab active"
+        data-view="1"
+      >
+        1. Stress overview
+      </button>
+
+      <button
+        class="view-tab"
+        data-view="2"
+      >
+        2. Study time
+      </button>
+
+      <button
+        class="view-tab"
+        data-view="3"
+      >
+        3. Sleep
+      </button>
+
+      <button
+        class="view-tab"
+        data-view="4"
+      >
+        4. Lifestyle factors
+      </button>
+
+      <button
+        class="view-tab"
+        data-view="5"
+      >
+        5. Compare groups
+      </button>
+
+      <button
+        class="view-tab"
+        data-view="6"
+      >
+        6. Combined profile
+      </button>
+    </nav>
+
+    <section
+      id="view-1"
+      class="story-view active"
+    >
+      <div class="view-heading">
+        <div>
+          <span class="view-number">
+            View 1
+          </span>
+
+          <h2>
+            How stressed are students?
+          </h2>
+
+          <p>
+            Start with the full dataset and group students by their
+            stress level.
+          </p>
+        </div>
+
+        <div class="controls">
+          <label>
+            Layout
+
+            <select id="view1-layout">
+              <option value="stress">
+                Group by stress
+              </option>
+
+              <option value="all">
+                All students together
+              </option>
+            </select>
+          </label>
+        </div>
+      </div>
+
+      <div
+        id="view1-metrics"
+        class="metric-row"
+      ></div>
+
+      <div
+        id="view1-chart"
+        class="viz-panel"
+      ></div>
+
+      <p
+        id="view1-takeaway"
+        class="takeaway"
+      ></p>
+    </section>
+
+    <section
+      id="view-2"
+      class="story-view"
+    >
+      <div class="view-heading">
+        <div>
+          <span class="view-number">
+            View 2
+          </span>
+
+          <h2>
+            Study time and academic performance
+          </h2>
+
+          <p>
+            Explore how daily study hours relate to GPA while
+            keeping stress level visible.
+          </p>
+        </div>
+
+        <div class="controls">
+          <label>
+            Stress filter
+
+            <select id="view2-stress-filter">
+              <option value="All">
+                All stress levels
+              </option>
+
+              <option value="Low">
+                Low
+              </option>
+
+              <option value="Moderate">
+                Moderate
+              </option>
+
+              <option value="High">
+                High
+              </option>
+            </select>
+          </label>
+        </div>
+      </div>
+
+      <div
+        id="view2-chart"
+        class="viz-panel"
+      ></div>
+
+      <p
+        id="view2-takeaway"
+        class="takeaway"
+      ></p>
+    </section>
+
+    <section
+      id="view-3"
+      class="story-view"
+    >
+      <div class="view-heading">
+        <div>
+          <span class="view-number">
+            View 3
+          </span>
+
+          <h2>
+            Sleep, stress, and GPA
+          </h2>
+
+          <p>
+            Explore how nightly sleep hours relate to stress and
+            academic performance.
+          </p>
+        </div>
+
+        <div class="controls">
+          <label>
+            Stress filter
+
+            <select id="view3-stress-filter">
+              <option value="All">
+                All stress levels
+              </option>
+
+              <option value="Low">
+                Low
+              </option>
+
+              <option value="Moderate">
+                Moderate
+              </option>
+
+              <option value="High">
+                High
+              </option>
+            </select>
+          </label>
+        </div>
+      </div>
+
+      <div
+        id="view3-chart"
+        class="viz-panel"
+      ></div>
+
+      <p
+        id="view3-takeaway"
+        class="takeaway"
+      ></p>
+    </section>
+
+    <section
+      id="view-4"
+      class="story-view"
+    >
+      <div class="view-heading">
+        <div>
+          <span class="view-number">
+            View 4
+          </span>
+
+          <h2>
+            How do students spend their day?
+          </h2>
+
+          <p>
+            Compare study, sleep, social activity, physical activity,
+            and extracurricular time.
+          </p>
+        </div>
+
+        <div class="controls">
+          <label>
+            Lifestyle factor
+
+            <select id="view4-factor">
+              <option value="studyHours">
+                Study
+              </option>
+
+              <option value="sleepHours">
+                Sleep
+              </option>
+
+              <option value="socialHours">
+                Social
+              </option>
+
+              <option value="physicalHours">
+                Physical activity
+              </option>
+
+              <option value="extracurricularHours">
+                Extracurricular
+              </option>
+            </select>
+          </label>
+        </div>
+      </div>
+
+      <div
+        id="view4-chart"
+        class="viz-panel"
+      ></div>
+
+      <p
+        id="view4-takeaway"
+        class="takeaway"
+      ></p>
+    </section>
+
+    <section
+      id="view-5"
+      class="story-view"
+    >
+      <div class="view-heading">
+        <div>
+          <span class="view-number">
+            View 5
+          </span>
+
+          <h2>
+            Compare two student groups
+          </h2>
+
+          <p>
+            Compare the GPA and stress patterns of two lifestyle groups.
+          </p>
+        </div>
+
+        <div class="controls compare-controls">
+          <label>
+            Compare by
+
+            <select id="view5-variable">
+              <option value="sleepHours">
+                Sleep
+              </option>
+
+              <option value="studyHours">
+                Study time
+              </option>
+
+              <option value="physicalHours">
+                Physical activity
+              </option>
+            </select>
+          </label>
+
+          <label>
+            Group A
+
+            <select id="view5-a">
+            </select>
+          </label>
+
+          <label>
+            Group B
+
+            <select id="view5-b">
+            </select>
+          </label>
+        </div>
+      </div>
+
+      <div
+        id="view5-chart"
+        class="viz-panel"
+      ></div>
+
+      <p
+        id="view5-takeaway"
+        class="takeaway"
+      ></p>
+    </section>
+
+    <section
+      id="view-6"
+      class="story-view"
+    >
+      <div class="view-heading">
+        <div>
+          <span class="view-number">
+            View 6
+          </span>
+
+          <h2>
+            Put the student profile together
+          </h2>
+
+          <p>
+            Combine several lifestyle characteristics and examine
+            the matching students' GPA and stress levels.
+          </p>
+        </div>
+
+        <div class="controls profile-controls">
+          <label>
+            Study time
+
+            <select id="view6-study">
+              <option value="All">
+                Any
+              </option>
+            </select>
+          </label>
+
+          <label>
+            Sleep
+
+            <select id="view6-sleep">
+              <option value="All">
+                Any
+              </option>
+            </select>
+          </label>
+
+          <label>
+            Physical activity
+
+            <select id="view6-physical">
+              <option value="All">
+                Any
+              </option>
+            </select>
+          </label>
+
+          <button
+            id="view6-reset"
+            class="secondary-button"
+            type="button"
+          >
+            Clear profile
+          </button>
+        </div>
+      </div>
+
+      <div
+        id="view6-metrics"
+        class="metric-row"
+      ></div>
+
+      <div
+        id="view6-chart"
+        class="viz-panel"
+      ></div>
+
+      <div
+        id="view6-empty"
+        class="empty-state hidden"
+      >
+        <h3>
+          No students match this combination.
+        </h3>
+
+        <p>
+          Change or clear one of the filters to continue.
+        </p>
+      </div>
+
+      <p
+        id="view6-takeaway"
+        class="takeaway"
+      ></p>
+    </section>
+  </main>
+
+  <div
+    id="tooltip"
+    class="tooltip hidden"
+  ></div>
+
+  <footer>
+    <span>
+      Developed for CPS 5745 — Interact Info Visualization
+    </span>
+
+    <span>
+      Mitch Toran
+    </span>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <script src="app.js"></script>
+</body>
+</html>
