@@ -288,6 +288,18 @@ function makeGrid(
   );
 }
 
+function positionTooltip(event) {
+  tooltip
+    .style(
+      "left",
+      `${event.clientX + 14}px`
+    )
+    .style(
+      "top",
+      `${event.clientY + 14}px`
+    );
+}
+
 function showTooltip(
   event,
   student
@@ -336,15 +348,9 @@ function showTooltip(
 
       Extracurricular:
       ${student.extracurricularHours} hrs/day
-    `)
-    .style(
-      "left",
-      `${event.clientX + 14}px`
-    )
-    .style(
-      "top",
-      `${event.clientY + 14}px`
-    );
+    `);
+
+  positionTooltip(event);
 }
 
 function hideTooltip() {
@@ -1111,6 +1117,10 @@ function renderView4() {
     )
     .join("rect")
     .attr(
+      "class",
+      "lifestyle-bar"
+    )
+    .attr(
       "x",
       (item) =>
         x(item.level)
@@ -1141,6 +1151,41 @@ function renderView4() {
     .attr(
       "opacity",
       0.88
+    )
+    .style(
+      "cursor",
+      "pointer"
+    )
+    .on(
+      "mousemove",
+      (event, item) => {
+        tooltip
+          .classed(
+            "hidden",
+            false
+          )
+          .html(`
+            <strong>
+              ${item.level} Stress
+            </strong>
+
+            <br>
+
+            Students:
+            ${item.count}
+
+            <br>
+
+            ${factor.label}:
+            ${item.average.toFixed(2)} hrs/day
+          `);
+
+        positionTooltip(event);
+      }
+    )
+    .on(
+      "mouseleave",
+      hideTooltip
     );
 
   svg
@@ -1528,7 +1573,52 @@ function drawComparisonPanel(
           item.level
         ]
     )
-    .attr("rx", 5);
+    .attr("rx", 5)
+    .style(
+      "cursor",
+      "pointer"
+    )
+    .on(
+      "mousemove",
+      (event, item) => {
+        tooltip
+          .classed(
+            "hidden",
+            false
+          )
+          .html(`
+            <strong>
+              ${group.label}
+            </strong>
+
+            <br>
+
+            Stress:
+            ${item.level}
+
+            <br>
+
+            Students:
+            ${item.count}
+
+            <br>
+
+            Percentage:
+            ${item.percent.toFixed(1)}%
+
+            <br>
+
+            Group average GPA:
+            ${averageGPA.toFixed(2)}
+          `);
+
+        positionTooltip(event);
+      }
+    )
+    .on(
+      "mouseleave",
+      hideTooltip
+    );
 
   svg
     .selectAll(
@@ -1955,6 +2045,41 @@ function drawView6Chart(
           stressColors[
             item.level
           ]
+        )
+        .style(
+          "cursor",
+          "pointer"
+        )
+        .on(
+          "mousemove",
+          (event) => {
+            tooltip
+              .classed(
+                "hidden",
+                false
+              )
+              .html(`
+                <strong>
+                  ${item.level} Stress
+                </strong>
+
+                <br>
+
+                Students:
+                ${item.count}
+
+                <br>
+
+                Percentage:
+                ${item.percent.toFixed(1)}%
+              `);
+
+            positionTooltip(event);
+          }
+        )
+        .on(
+          "mouseleave",
+          hideTooltip
         );
 
       if (
@@ -2170,6 +2295,10 @@ function drawView6Chart(
     .data(bins)
     .join("rect")
     .attr(
+      "class",
+      "gpa-bin"
+    )
+    .attr(
       "x",
       (bin) =>
         x(bin.x0) + 1
@@ -2202,6 +2331,40 @@ function drawView6Chart(
     .attr(
       "opacity",
       0.75
+    )
+    .style(
+      "cursor",
+      "pointer"
+    )
+    .on(
+      "mousemove",
+      (event, bin) => {
+        tooltip
+          .classed(
+            "hidden",
+            false
+          )
+          .html(`
+            <strong>
+              GPA Range
+            </strong>
+
+            <br>
+
+            ${bin.x0.toFixed(2)}–${bin.x1.toFixed(2)}
+
+            <br>
+
+            Students:
+            ${bin.length}
+          `);
+
+        positionTooltip(event);
+      }
+    )
+    .on(
+      "mouseleave",
+      hideTooltip
     );
 
   svg
