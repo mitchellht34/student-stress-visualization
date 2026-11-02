@@ -1,6 +1,8 @@
 const CSV_FILE = "student_lifestyle_dataset.csv";
 
 let data = [];
+let view5Groups = [];
+let groupDefinitionsCache = {};
 
 const stressColors = {
   Low: "#4d8f72",
@@ -9,8 +11,6 @@ const stressColors = {
 };
 
 const tooltip = d3.select("#tooltip");
-
-let view5Groups = [];
 
 function setupNavigation() {
   const tabs = document.querySelectorAll(".view-tab");
@@ -65,42 +65,28 @@ function setupNavigation() {
 function convertRow(row) {
   return {
     id: row.Student_ID,
-
-    studyHours:
-      Number(row.Study_Hours_Per_Day),
-
-    extracurricularHours:
-      Number(row.Extracurricular_Hours_Per_Day),
-
-    sleepHours:
-      Number(row.Sleep_Hours_Per_Day),
-
-    socialHours:
-      Number(row.Social_Hours_Per_Day),
-
-    physicalHours:
-      Number(row.Physical_Activity_Hours_Per_Day),
-
-    gpa:
-      Number(row.GPA),
-
-    stress:
-      row.Stress_Level
+    studyHours: Number(row.Study_Hours_Per_Day),
+    extracurricularHours: Number(row.Extracurricular_Hours_Per_Day),
+    sleepHours: Number(row.Sleep_Hours_Per_Day),
+    socialHours: Number(row.Social_Hours_Per_Day),
+    physicalHours: Number(row.Physical_Activity_Hours_Per_Day),
+    gpa: Number(row.GPA),
+    stress: row.Stress_Level
   };
 }
 
 async function loadDataset() {
-  const status =
-    document.querySelector("#data-status");
+  const status = document.querySelector("#data-status");
 
   try {
     status.textContent = "Loading data...";
 
-    data =
-      await d3.csv(
-        CSV_FILE,
-        convertRow
-      );
+    data = await d3.csv(
+      CSV_FILE,
+      convertRow
+    );
+
+    buildGroupDefinitionCache();
 
     status.textContent =
       `${data.length.toLocaleString()} rows loaded`;
@@ -189,7 +175,6 @@ function stressDistribution(students) {
     return {
       level,
       count,
-
       percent:
         count /
         students.length *
@@ -199,14 +184,12 @@ function stressDistribution(students) {
 }
 
 function createMetricCards() {
-  const counts =
-    stressCounts();
+  const counts = stressCounts();
 
   const metrics = [
     {
       value:
         data.length.toLocaleString(),
-
       label:
         "students"
     },
@@ -214,7 +197,6 @@ function createMetricCards() {
     ...counts.map((item) => ({
       value:
         `${item.percent.toFixed(1)}%`,
-
       label:
         `${item.level.toLowerCase()} stress`
     }))
@@ -768,7 +750,7 @@ function renderScatterplot(
     )
     .call(
       d3.axisLeft(y)
-      .ticks(6)
+        .ticks(6)
     );
 
   svg
@@ -1071,7 +1053,7 @@ function renderView4() {
     )
     .call(
       d3.axisLeft(y)
-      .ticks(6)
+        .ticks(6)
     );
 
   svg
@@ -1285,9 +1267,32 @@ function getGroupDefinitions(field) {
   ];
 }
 
-function buildComparisonGroups(field) {
+function buildGroupDefinitionCache() {
+  groupDefinitionsCache = {
+    studyHours:
+      getGroupDefinitions(
+        "studyHours"
+      ),
+
+    sleepHours:
+      getGroupDefinitions(
+        "sleepHours"
+      ),
+
+    physicalHours:
+      getGroupDefinitions(
+        "physicalHours"
+      )
+  };
+}
+
+function buildComparisonGroups(
+  field
+) {
   const definitions =
-    getGroupDefinitions(field);
+    groupDefinitionsCache[
+      field
+    ];
 
   return definitions.map(
     (definition) => ({
@@ -1523,10 +1528,7 @@ function drawComparisonPanel(
           item.level
         ]
     )
-    .attr(
-      "rx",
-      5
-    );
+    .attr("rx", 5);
 
   svg
     .selectAll(
@@ -1692,7 +1694,9 @@ function populateFilter(
     );
 
   const definitions =
-    getGroupDefinitions(field);
+    groupDefinitionsCache[
+      field
+    ];
 
   select.innerHTML =
     `<option value="All">Any</option>`;
@@ -1738,11 +1742,12 @@ function matchesSelectedGroup(
   }
 
   const definition =
-    getGroupDefinitions(
+    groupDefinitionsCache[
       field
-    ).find(
+    ].find(
       (group) =>
-        group.id === selected
+        group.id ===
+        selected
     );
 
   return definition.matches(
@@ -1827,31 +1832,24 @@ function createView6Metrics(
     {
       value:
         students.length.toLocaleString(),
-
       label:
         "matching students"
     },
-
     {
       value:
         averageGPA.toFixed(2),
-
       label:
         "average GPA"
     },
-
     {
       value:
         `${highStress.toFixed(1)}%`,
-
       label:
         "high stress"
     },
-
     {
       value:
         `${averageSleep.toFixed(2)} hrs`,
-
       label:
         "average sleep"
     }
@@ -1893,17 +1891,10 @@ function drawView6Chart(
       svg.attr("width")
     );
 
-  const height = 470;
-
   const distribution =
     stressDistribution(
       students
     );
-
-  /*
-    LEFT SIDE:
-    100% stacked stress bar
-  */
 
   const leftStart = 65;
   const leftWidth =
@@ -2054,10 +2045,6 @@ function drawView6Chart(
     }
   );
 
-  /*
-    DIVIDER
-  */
-
   svg
     .append("line")
     .attr(
@@ -2084,11 +2071,6 @@ function drawView6Chart(
       "stroke-width",
       2
     );
-
-  /*
-    RIGHT SIDE:
-    GPA histogram
-  */
 
   const histogramStart =
     width / 2 + 65;
@@ -2167,7 +2149,7 @@ function drawView6Chart(
     )
     .call(
       d3.axisBottom(x)
-      .ticks(6)
+        .ticks(6)
     );
 
   svg
@@ -2178,7 +2160,7 @@ function drawView6Chart(
     )
     .call(
       d3.axisLeft(y)
-      .ticks(5)
+        .ticks(5)
     );
 
   svg
@@ -2558,11 +2540,8 @@ function setupResetButton() {
 
 function init() {
   setupNavigation();
-
   setupViewControls();
-
   setupResetButton();
-
   loadDataset();
 }
 
